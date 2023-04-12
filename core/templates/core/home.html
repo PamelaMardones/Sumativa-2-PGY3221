@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA Compatible" content="IE=edge">
+  <meta name="viewport" content="width=devise-width, initial-scale=1.0">
+  <title>Menú principal</title>
+  <!-- Importaciones de CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  {% load static %}
+  {% block css %}
+  {% endblock %}
+  <link rel = "stylesheet" href = "{%static 'core/css/style.css' %}">
+</head>
+<body>
+  <header>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <img src="{% static 'core/img/logo.jpg'%}" alt="logo-kuriboh-store" width="100" height="100" class="d-inline-block align-text-top">      
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <form class="d-flex mx-auto">
+            <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Buscar</button>
+          </form>
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" id="userText">Bienvenido, Invitado</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'home'%}">Inicio</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Juegos de cartas</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'pokemon'%}">Pokémon</a></li>
+                <li><a class="dropdown-item" href="{% url 'magic'%}">Magic: the Gathering</a></li>
+                <li><a class="dropdown-item" href="{% url 'yugioh'%}">Yu-Gi-Oh Card Game</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'juegos_mesa'%}">Juegos de Mesa</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modalLogin">Acceder</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link" href="#" id="navbarOffCanvas" role="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                Carrito
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'actualizar_perfil'%}">Actualizar Perfil</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="text-center">Bienvenido a Kuriboh Store</h1>
+      </div>
+    </div>
+
+    <!-- carrusel -->
+    <div class="row">
+      <div class="col-2">
+
+      </div>
+      <div class="col-8">
+        <div id="carouselPrincipal" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="{%static 'core/img/pokemon.jpg'%}" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="{%static 'core/img/268233.jpg'%}" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="{%static 'core/img/yu-gi-oh-tcg-yugi-art.png'%}" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="{%static 'core/img/one-piece-hd-wallpaper.jpg'%}" class="d-block w-100" alt="...">
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselPrincipal" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselPrincipal" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+      <div class="col-2">
+
+      </div>
+    </div>
+<hr>
+    <div class="row">
+      <section id="latest-products">
+        <div class="container">
+          <h2>Últimos productos vendidos</h2>
+          <div class="row">
+            <div class="col-md-3">
+              <div class="card">
+                <img src="{%static 'core/img/tablegame-images/dixit.webp'%}" class="img-card img-fluid" alt="dixit">
+                <div class="card-body">
+                  <h5 class="card-title">Dixit</h5>
+                  <p class="card-text">Dixit, donde tu imaginación crea increíbles historias</p>
+                  <a href="#" class="btn btn-outline-warning">Agregar al carrito</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card">
+                <img src="{%static 'core/img/cardgames-images/yugioh-images/dimension-force.jpeg'%}" class="img-card img-fluid" alt="dimension-force" >
+                <div class="card-body">
+                  <h5 class="card-title">Dimension Force</h5>
+                  <p class="card-text">Yu-Gi-Oh! Dimension Force Booster Box</p>
+                  <a href="#" class="btn btn-outline-warning">Agregar al carrito</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card">
+                <img src="{%static 'core/img/cardgames-images/magic-images/brothers-war.webp'%}" class="img-card img-fluid" alt="magic-brothers-war">
+                <div class="card-body">
+                  <h5 class="card-title">Magic The Gathering The Brothers War</h5>
+                  <p class="card-text">Magic the Gathering: The Brothers’ War Draft Booster Box</p>
+                  <a href="#" class="btn btn-outline-warning">Agregar al carrito</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card">
+                <img src="{%static 'core/img/cardgames-images/pokemon-images/klara-kit.jpeg'%}" class="img-card img-fluid" alt="klara-kit">
+                <div class="card-body">
+                  <h5 class="card-title">Pokémon Klara Collection</h5>
+                  <p class="card-text">Pokemon: Klara Premium Tournament Collection</p>
+                  <a href="#" class="btn btn-outline-warning">Agregar al carrito</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+<hr>
+    <div class="row">
+      <section class="news">
+        <div class="container">
+          <h2>Noticias</h2>
+          <div class="row">
+            <div class="col-md-6 col-lg-4">
+              <div class="card">
+                <img src="{%static 'core/img/26079ab060401d8a76039e985d63a3e9.jpe'%}" class="card-img-top" alt="Noticia 1">
+                <div class="card-body">
+                  <h5 class="card-title">Dragon Ball Super Card Game</h5>
+                  <p class="card-text">El sueño de los fans del anime y la pesadilla de Magic y Hearthstone: Dragon Ball Super Card Game da el salto a PC.</p>
+                  <a href="#" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#modalDBNews">Leer más</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+              <div class="card">
+                <img src="{%static 'core/img/1620977709_149451_1620977973_noticia_normal.jpg'%}" class="card-img-top" alt="Noticia 2">
+                <div class="card-body">
+                  <h5 class="card-title">One Piece</h5>
+                  <p class="card-text">TCG de One Piece lanza su aplicación oficial para que aprendas a jugar.</p>
+                  <a href="#" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#modalOPNews">Leer más</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+              <div class="card">
+                <img src="{%static 'core/img/1366_2000.jpg'%}" class="card-img-top" alt="Noticia 3">
+                <div class="card-body">
+                  <h5 class="card-title">Magic: the Gathering</h5>
+                  <p class="card-text">Disney Lorcana: todo lo que sabemos sobre el nuevo juego de cartas que quiere competir con Magic: The Gathering y Pokémon.</p>
+                  <a href="#" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#modalMGNews">Leer más</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+<!-- Offcanvas -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasRightLabel">Carrito de compra</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <p>No hay productos en el carrito</p>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalLabel">Iniciar Sesión</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="login">
+          <div class="mb-3">
+            <label for="email" class="form-label">Correo Electrónico</label>
+            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" required>
+            <div id="emailHelp" class="form-text">No compartiremos tu correo electrónico con nadie.</div>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="password" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Ingresar</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <small class="mr-auto">¿No tienes una cuenta? <a href="registro.html">Regístrate</a></small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal News -->
+<div class="modal fade" id="modalDBNews" tabindex="-1" aria-labelledby="modalDBNewsLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalDBNewsLabel">El sueño de los fans del anime y la pesadilla de Magic y Hearthstone: Dragon Ball Super Card Game da el salto a PC</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Hemos presenciado incontables saltos del papel a los videojuegos, pero el que está a punto de suceder es realmente singular: Bandai ha anunciado de manera oficial una versión digital de Dragon Ball Super Card Game, el juego de cartas coleccionables basado en el manga, las series, las películas, los videojuegos y todo lo relacionado con la obra de Akira Toriyama y la Toei. Un pelotazo de los grandes.</p>
+        <img src="{static 'core/img/1366_2000.webp'%}" class="img-fluid" alt="Noticia 1">
+        <p>La fecha de lanzamiento está todavía en el aire, aunque no tardaremos en tener novedades al respecto: Bandai ha anunciado que la versión digital de Dragon Ball Super Card Game será presentada formalmente durante el Dragon Ball Games Battle Hour 2023, el cual se celebrará los días 4 y 5 de marzo.</p>
+      </div>
+      <div class="modal-footer">
+        <span class="badge rounded-pill text-bg-secondary">Dragon Ball Super</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalOPNews" tabindex="-1" aria-labelledby="modalOPNewsLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalOPNewsLabel">TCG de One Piece lanza su aplicación oficial para que aprendas a jugar</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>One Piece estará cumpliendo 25 muy pronto este año, y una de las formas de celebrar este cuartito de siglo es con el lanzamiento de su TCG oficial del cual ya puedes descargar la aplicación para que aprendas todo lo relacionado a su nuevo juego de cartas.</p>
+        <img src="{%static 'coreimages/ogp.png'%}" class="img-fluid" alt="Noticia 2">
+        <p>El TCG es muy popular entre la cultura otaku y fans del anime siendo Pokémon y Yu-Gi-Oh! los más famosos de todos los juegos de cartas del estilo, aunque sabemos que Dragon Ball también tiene su propio traiding card game, y ahora la obra de Eiichiro Oda está entrando al mismo mundito de cartas intercambiables.</p>
+        <p>Por ello es que Bandai, marca que elaboró el TCG de One Piece, ahora ha lanzado una app oficial para que los fans que se animen a coleccionarlo vayan aprendiendo la dinámicas de juego. Por ejemplo, actualmente, la aplicación tiene tres modos tutoriales, cada uno de los cuales enseña diferentes aspectos. Además también se liberó un tráiler del juego de cartas de Luffy y compañía que desglosa los conceptos básicos del uso de la baraja.</p>
+        <div class="embed-responsive embed-responsive-16by9 text-center">
+          <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/PJuiTrLR0pQ?rel=0" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <span class="badge rounded-pill text-bg-secondary">One Piece</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalMGNews" tabindex="-1" aria-labelledby="modalMGNewsLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalMGNewsLabel">Disney Lorcana: todo lo que sabemos sobre el nuevo juego de cartas que quiere competir con Magic: The Gathering y Pokémon</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Presentado durante la D23 Expo de Disney, una de las grandes novedades de la casa de Mickey, Marvel y Star Wars pasa por abrazar los juegos de cartas coleccionables con Disney Lorcana, su nueva apuesta en el mundo de los TCG al más puro estilo Magic: The Gathering, Pokémon y Yu-Gi-Oh.</p>
+        <img src="{%static 'core/img/1366_2000 (1).webp'%}" class="img-fluid" alt="Noticia 3">
+        <p>El TCG es muy popular entre la cultura otaku y fans del anime siendo Pokémon y Yu-Gi-Oh! los más famosos de todos los juegos de cartas del estilo, aunque sabemos que Dragon Ball también tiene su propio traiding card game, y ahora la obra de Eiichiro Oda está entrando al mismo mundito de cartas intercambiables.</p>
+        <p>De la mano de sus icónicos personajes, Disney Lorcana nos invitará a coleccionar sets, luchar junto a  héroes y villanos, lanzar magias y, como suele ser habitual en estos casos, dejarnos una pasta en cartas. Esto es todo lo que sabemos sobre Disney Lorcana.</p>
+        <div class="embed-responsive embed-responsive-16by9 text-center">
+          <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/uGQXw9fcUbc?rel=0" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <span class="badge rounded-pill text-bg-secondary">Magic: the Gathering</span>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+
+<div class="img-footer-container">
+  <img src="https://media.tenor.com/74l5y1hUdtwAAAAj/pokemon.gif" alt="Imagen" class="img-footer">
+  <footer class="footer">
+    <div class="container bottom_border">
+        <div class="row">
+            <div class=" col-sm-4 col-md col-sm-4  col-12 col">
+                <h5 class="headin5_amrc col_white_amrc pt2">Contáctanos</h5>
+                <p class="mb10">Si necesitas asesoría con tu compra no dudes en contactarnos. Hacemos envío a todo Chile.</p>
+                <p><i class="fa fa-location-arrow"></i> San Nicolás 4613, Santiago, Chile</p>
+                <p><i class="fa fa-phone"></i> +569 57066835  </p>
+                <p><i class="fa fa fa-envelope"></i> info@kuribohstore.cl  </p>
+            </div>
+            <p class="text-center">Copyright @2023 | Kuriboh Store <a href="#"></a></p>
+            <ul class="social_footer_ul">
+            <li><a href="http://facebook.com/kuriboh-store"><i class="fab fa-facebook-f"></i></a></li>
+            <li><a href="http://twitter.com/kuriboh-store"><i class="fab fa-twitter"></i></a></li>
+            <li><a href="http://linkedin.com/kuriboh-store"><i class="fab fa-linkedin"></i></a></li>
+            <li><a href="http://instagrame.com/kuriboh-store"><i class="fab fa-instagram"></i></a></li>
+            </ul>
+        </div>
+    </div>
+  </footer>
+</div>
+
+{%block js%}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
+<!-- Archivo JS personalizado -->
+
+<script src="{%static 'core/js/main.js'%}"></script>
+</html>
