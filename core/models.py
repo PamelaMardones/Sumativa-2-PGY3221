@@ -7,7 +7,7 @@ class Comuna(models.Model):
     idComuna = models.CharField(primary_key=True, max_lenght=15, verbose_name='ID comuna')
 
     def __str__(self):
-        return self.nombre
+        return self.nombreComuna
 
 class Direccion(models.Model):
     nombreDireccion = models.CharField(max_length=50, verbose_name='Dirección')
@@ -15,7 +15,7 @@ class Direccion(models.Model):
     comuna = models.ForeignKey(Comuna, on_delete=models.PROTECT)
 
     def __str__(self):
-     return self.nombre
+     return self.nombreDireccion
 
 class Producto(models.Model):
     nombreProducto = models.CharField(max_lenght=50, verbose_name='Nombre del Producto')
@@ -24,7 +24,7 @@ class Producto(models.Model):
     descripcion = models.TextField()
 
     def __str__(self):
-        return self.nombre
+        return self.codigoProducto
 
 class Compra(models.Model):
     codigoCompra = models.CharField(max_lenght=15, primary_key=True, verbose_name='Código de compra')
@@ -33,7 +33,7 @@ class Compra(models.Model):
     direccion = models.ForeignKey(Direccion, on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.nombre
+        return self.codigoCompra
 
 class Persona(models.Model):
     rut = models.CharField(max_lenght=11, primary_key=True, verbose_name='Rut')
@@ -42,7 +42,7 @@ class Persona(models.Model):
     contraseña = models.CharField(max_lenght=40, verbose_name='Contraseña')
 
     def __str__(self):
-        return self.nombre
+        return self.rut
 
 class Cliente(models.Model):
     compra = models.ForeignKey(Compra, on_delete=models.PROTECT)
@@ -51,7 +51,7 @@ class Cliente(models.Model):
     emailCliente = models.CharField(max_lenght=50, verbose_name='Email')
 
     def __str__(self):
-        return self.nombre
+        return self.rutCliente
 
 
 
