@@ -12,7 +12,7 @@ class Comuna(models.Model):
 class Direccion(models.Model):
     nombreDireccion = models.CharField(max_length=50, verbose_name='Dirección')
     codigoPostal = models.CharField(primary_key=True, max_lenght=50, verbose_name='Código Postal')
-    comuna = models.ForeignKey(Comuna, on_delete=models.PROTECT)
+    Comuna = models.ForeignKey(Comuna, on_delete=models.PROTECT)
 
     def __str__(self):
      return self.nombreDireccion
@@ -29,8 +29,8 @@ class Producto(models.Model):
 class Compra(models.Model):
     codigoCompra = models.CharField(max_lenght=15, primary_key=True, verbose_name='Código de compra')
     fechaCompra = models.DateField()
-    producto = models.ForeignKey(Producto, on_delete=models.PROTECT)
-    direccion = models.ForeignKey(Direccion, on_delete=models.PROTECT)
+    Producto = models.ForeignKey(Producto, on_delete=models.PROTECT)
+    Direccion = models.ForeignKey(Direccion, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.codigoCompra
@@ -45,7 +45,7 @@ class Persona(models.Model):
         return self.rut
 
 class Cliente(models.Model):
-    compra = models.ForeignKey(Compra, on_delete=models.PROTECT)
+    Compra = models.ForeignKey(Compra, on_delete=models.PROTECT)
     rutCliente = models.CharField(primary_key=True, max_length=11, verbose_name='Rut Cliente')
     nombreCliente = models.CharField(max_lenght=50, verbose_name='Nombre')
     emailCliente = models.CharField(max_lenght=50, verbose_name='Email')
