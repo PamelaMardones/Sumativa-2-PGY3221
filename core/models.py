@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import AbstractUser, Permission, Group
 # Create your models here.
 
 class Comuna(models.Model):
@@ -35,15 +35,6 @@ class Compra(models.Model):
     def __str__(self):
         return self.codigoCompra
 
-class Persona(models.Model):
-    rut = models.CharField(max_length=11, primary_key=True, verbose_name='Rut')
-    nombre = models.CharField(max_length=50, verbose_name='Nombre')
-    email = models.CharField(max_length=50, verbose_name='Email')
-    contraseña = models.CharField(max_length=40, verbose_name='Contraseña')
-
-    def __str__(self):
-        return self.rut
-
 class Cliente(models.Model):
     Compra = models.ForeignKey(Compra, on_delete=models.PROTECT)
     rutCliente = models.CharField(primary_key=True, max_length=11, verbose_name='Rut Cliente')
@@ -52,7 +43,6 @@ class Cliente(models.Model):
 
     def __str__(self):
         return self.rutCliente
-
 
 
 

@@ -4,7 +4,8 @@ from .views import home, actualizar,juegos_mesa,juegos,magic,pokemon,registro,yu
 
 urlpatterns = [
     path('', home, name = "home"),
-    path('actualizar-perfil/', actualizar.as_view(), name = "actualizar_perfil"),
+    path('logout/', home, name='logout'),
+    path('actualizar-perfil/', actualizar, name = "actualizar_perfil"),
     path('juegos-mesa/', juegos_mesa, name = "juegos_mesa"),
     path('juegos/', juegos, name = "juegos"),
     path('magic/', magic, name = "magic"),
