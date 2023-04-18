@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import cx_Oracle
+cx_Oracle.init_oracle_client(lib_dir=r"C:\oracle_cli\instantclient_21_9")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -77,15 +79,12 @@ WSGI_APPLICATION = 'KuribohStore.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.oracle',
-        'NAME': '127.0.0.1:1521/orcl',
-        'USER': 'PROYECTO_DJANGO',
-        'PASSWORD': 'Proyecto2023*',
-        'TEST': {
-            'USER': 'default_test',
-            'TBLSPACE': 'default_test_tbls',
-            'TBLSPACE_TMP': 'default_test_tbls_tmp',
-        },
-    },
+        'NAME': 'XE',
+        'USER': 'system',
+        'PASSWORD': '1234',
+        'HOST': 'localhost',
+        'PORT': '1522',
+    }
 }
 
 
