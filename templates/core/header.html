@@ -15,7 +15,11 @@
             </form>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item">
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" id="userText">Bienvenido, Invitado</a>
+                {% if user.is_authenticated %}
+                    <p class="nav-link disabled">Bienvenido, {{ user.username }}</p>
+                {% else %}
+                    <p class="nav-link disabled">Bienvenido, invitado</p>
+                {% endif %}
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'home'%}">Inicio</a>
@@ -47,10 +51,7 @@
             </li>
             {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
-                    <form action="{% url 'logout' %}" method="post">
-                        {% csrf_token %}
-                        <a class="nav-link" href="#">Cerrar Sesión</a>
-                    </form>
+                    <a class="nav-link" href="{% url 'logout' %}">Cerrar sesión</a>
                 </li>
             {% else %}
                 <li class="nav-item dropdown">

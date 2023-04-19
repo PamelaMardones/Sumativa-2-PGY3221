@@ -17,10 +17,27 @@ $(document).ready(function(){
             alert('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un carácter especial.');
             return;
         }
-        
-        $('#modalLogin').modal('hide');
+
+        $.ajax({
+            type: 'POST',
+            url: '/login',
+            data: {
+                email: email,
+                password: password
+            },
+            success: function(data) {
+                if (data.success) {
+                    window.location.href = data.url;
+                } else {
+                    alert(data.message);
+                }
+            },
+            error: function(data) {
+                alert('Error al iniciar sesión.');
+            }
+        });
     });
-  });
+});
 
 
 function isValidPassword(password) {

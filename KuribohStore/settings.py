@@ -11,8 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-import cx_Oracle
-cx_Oracle.init_oracle_client(lib_dir=r"C:\oracle_cli\instantclient_21_9")
+import KuribohStore.db as db
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -76,16 +75,8 @@ WSGI_APPLICATION = 'KuribohStore.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.oracle',
-        'NAME': 'XE',
-        'USER': 'system',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
-        'PORT': '1522',
-    }
-}
+
+DATABASES = db.SQLITE
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -131,5 +122,5 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 AUTH_USER_MODEL = 'auth.User'
+LOGIN_REDIRECT_URL = 'home'
