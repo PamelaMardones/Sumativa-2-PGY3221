@@ -1,0 +1,65 @@
+{% load static %}
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'core/img/logo.jpg'%}" alt="logo-kuriboh-store" width="100" height="100" class="d-inline-block align-text-top">      
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <form class="d-flex mx-auto">
+            <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Buscar</button>
+            </form>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                {% if user.is_authenticated %}
+                    <p class="nav-link disabled">Bienvenido, {{ user.username }}</p>
+                {% else %}
+                    <p class="nav-link disabled">Bienvenido, invitado</p>
+                {% endif %}
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'home'%}">Inicio</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Juegos de cartas</a>
+                <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'pokemon'%}">Pokémon</a></li>
+                <li><a class="dropdown-item" href="{% url 'magic'%}">Magic: the Gathering</a></li>
+                <li><a class="dropdown-item" href="{% url 'yugioh'%}">Yu-Gi-Oh Card Game</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'juegos_mesa'%}">Juegos de Mesa</a>
+            </li>
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                <a class="nav-link" href="{% url 'actualizar_perfil'%}">Actualizar Perfil</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                <a class="nav-link" href="{% url 'registro'%}">Registrarse</a>
+                </li>
+            {% endif %}
+            <li class="nav-item dropdown">
+                <a class="nav-link" href="#" id="navbarOffCanvas" role="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                Carrito
+                </a>
+            </li>
+            {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="{% url 'logout' %}">Cerrar sesión</a>
+                </li>
+            {% else %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modalLogin">Acceder</a>
+                </li>
+            {% endif %}
+            </ul>
+        </div>
+    </div>
+  </nav>
+</header>
