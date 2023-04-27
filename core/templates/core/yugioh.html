@@ -7,69 +7,24 @@
       <div class="col-12">
         <h1 class="text-center">Yugioh</h1>
       </div>
-    </div>
-      
-      <div class="row row-cols-1 row-cols-md-3 g-4">
-        <div class="col">
-          <div class="card">
-            <img src="{%static 'core/img/cardgames-images/yugioh-images/blazing-vortex.jpeg'%}" class="img-card img-fluid" alt="blazing-vortex" >
-            <div class="card-body">
-              <h5 class="card-title">Blazing Vortex</h5>
-              <p class="card-text">Yu-Gi-Oh! Blazing Vortex Booster Box</p>
-              <p class="card-text"> 3 Unidades Disponibles</p>
-              <p class="card-text">Valor: $59.990</p>
-              <button class="btn btn-outline-warning">Añadir al carrito</button>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img src="{%static 'core/img/cardgames-images/yugioh-images/dimension-force.jpeg'%}" class="img-card img-fluid" alt="dimension-force" >
-            <div class="card-body">
-              <h5 class="card-title">Dimension Force</h5>
-              <p class="card-text">Yu-Gi-Oh! Dimension Force Booster Box</p>
-              <p class="card-text"> 5 Unidades Disponibles</p>
-              <p class="card-text">Valor: $49.990</p>
-              <button class="btn btn-outline-warning">Añadir al carrito</button>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img src="{%static 'core/img/cardgames-images/yugioh-images/leganday-hero.jpeg'%}" class="img-card img-fluid" alt="legendary-hero">
-            <div class="card-body">
-              <h5 class="card-title">Legendary Hero Decks</h5>
-              <p class="card-text">Yu-Gi-Oh! Legendary Hero Decks</p>
-              <p class="card-text"> 5 Unidades Disponibles</p>
-              <p class="card-text">Valor: $25.990</p>
-              <button class="btn btn-outline-warning">Añadir al carrito</button>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img src="{%static 'core/images/cardgames-images/yugioh-images/ancient-battle.jpeg'%}" class="img-card img-fluid" alt="ancient-battle">
-            <div class="card-body">
-              <h5 class="card-title">Mega Tin 2021</h5>
-              <p class="card-text">Yu-Gi-Oh! Mega-Tin 2021: Tin of Ancient Battles</p>
-              <p class="card-text"> 6 Unidades Disponibles</p>
-              <p class="card-text">Valor: $19.990</p>
-              <button class="btn btn-outline-warning">Añadir al carrito</button>
-            </div>
-          </div>
-        </div>
-        <div class="col">
+
+      </div>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+          {% for product in products %}
+          <div class="col">
             <div class="card">
-              <img src="{%static 'core/img/cardgames-images/yugioh-images/magnificent-mavens.webp'%}" class="img-card img-fluid" alt="magnificent-mavens">
+              <img src="{{product.image}}" class="img-card img-fluid" alt="{{product.name}}" >
               <div class="card-body">
-                <h5 class="card-title">Magnificent Mavens</h5>
-                <p class="card-text">Yu-Gi-Oh! Magnificent Mavens</p>
-                <p class="card-text"> 8 Unidades Disponibles</p>
-                <p class="card-text">Valor: $29.990</p>
+                <h5 class="card-title">{{product.name}}</h5>
+                <p class="card-text">{{product.description}}</p>
+                <p class="card-text"> {{product.qty}} Unidades Disponibles</p>
+                <p class="card-text">Valor: ${{product.price}}</p>
                 <button class="btn btn-outline-warning">Añadir al carrito</button>
               </div>
             </div>
           </div>
+        {% endfor %}
+        </div>
       </div>
     </div>
   </div>

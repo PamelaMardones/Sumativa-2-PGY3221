@@ -1,4 +1,3 @@
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
@@ -15,9 +14,6 @@ def actualizar(request):
 def juegos_mesa(request):
     return render(request, 'core/juegos-mesa.html')
 
-def juegos(request):
-    return render(request, 'core/juegos.html')
-
 def magic(request):
     return render(request, 'core/magic.html')
 
@@ -28,7 +24,19 @@ def registro(request):
     return render(request, 'core/registro.html')
 
 def yugioh(request):
-    return render(request, 'core/yugioh.html')
+    #get products from API
+    api_response = requests.get('https://duocucpgy3221api-production.up.railway.app/api/products/')
+    
+    if api_response.status_code not in [200, 201]:
+        return redirect('home')
+    
+    #filter products by type=0 and catergory=2
+    products = [product for product in api_response.json() if product['type'] == 2 and product['category'] == 0] 
+    
+    print(products)
+        
+
+    return render(request, 'core/yugioh.html', {'products': products})
 
 def logout_view(request):
     logout(request)

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, actualizar,juegos_mesa,juegos, login_view,magic,pokemon,register,yugioh, logout_view, update
+from .views import home, actualizar,juegos_mesa, login_view,magic,pokemon,register,yugioh, logout_view, update
 
 
 urlpatterns = [
@@ -9,7 +9,6 @@ urlpatterns = [
     path('actualizar-perfil/', actualizar, name = "actualizar_perfil"),
     path('actualizar/', update, name = "actualizar"),
     path('juegos-mesa/', juegos_mesa, name = "juegos_mesa"),
-    path('juegos/', juegos, name = "juegos"),
     path('magic/', magic, name = "magic"),
     path('pokemon/', pokemon, name = "pokemon"),
     path('registro/', register, name = "registro"),
