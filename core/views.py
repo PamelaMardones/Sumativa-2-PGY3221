@@ -37,7 +37,13 @@ def juegos_mesa(request):
     return render(request, 'core/juegos-mesa.html', {'products': products})
 
 def magic(request):
-    return render(request, 'core/magic.html')
+    api_response = requests.get('https://duocucpgy3221api-production.up.railway.app/api/products/')
+
+    if api_response.status_code not in [200, 201]:
+        return redirect('home')
+    
+    products = [product for product in api_response.json() if product['type'] == 1 and product['category'] == 0] 
+    return render(request, 'core/magic.html', {'products': products})
 
 def pokemon(request):
     return render(request, 'core/pokemon.html')

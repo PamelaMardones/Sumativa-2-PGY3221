@@ -5,47 +5,27 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <h1 class="text-center">Magic: the Gathering</h1>
+        <h1 class="text-center">Magic</h1>
+      </div>
+
+      </div>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+          {% for product in products %}
+          <div class="col">
+            <div class="card">
+              <img src="{{product.image}}" class="img-card img-fluid" alt="{{product.name}}" >
+              <div class="card-body">
+                <h5 class="card-title">{{product.name}}</h5>
+                <p class="card-text">{{product.description}}</p>
+                <p class="card-text"> {{product.qty}} Unidades Disponibles</p>
+                <p class="card-text">Valor: ${{product.price}}</p>
+                <button class="btn btn-outline-warning">Añadir al carrito</button>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+        </div>
       </div>
     </div>
-      
-      <div class="row row-cols-1 row-cols-md-3 g-4">
-        <div class="col">
-          <div class="card">
-            <img src="{%static 'core/img/cardgames-images/magic-images/unfinity.webp'%}" class="img-card img-fluid" alt="magic-unfinity" >
-            <div class="card-body">
-              <h5 class="card-title">Magic the Gathering Unfinity Collector</h5>
-              <p class="card-text">Magic the Gathering: Unfinity Collector’s Box</p>
-              <p class="card-text"> 8 Unidades Disponibles</p>
-              <p class="card-text">Valor: $199.990</p>
-              <button class="btn btn-outline-warning">Añadir al carrito</button>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img src="{%static 'core/img/cardgames-images/magic-images/capenna.webp'%}" class="img-card img-fluid" alt="magic-capenna" >
-            <div class="card-body">
-              <h5 class="card-title">Magic the Gathering New Capenna</h5>
-              <p class="card-text">Magic The Gathering: Streets of New Capenna Bundle</p>
-              <p class="card-text"> 6 Unidades Disponibles</p>
-              <p class="card-text">Valor: $45.990</p>
-              <button class="btn btn-outline-warning">Añadir al carrito</button>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img src="{%static 'core/img/cardgames-images/magic-images/brothers-war.webp'%}" class="img-card img-fluid" alt="magic-brothers-war">
-            <div class="card-body">
-              <h5 class="card-title">Magic The Gathering The Brothers War</h5>
-              <p class="card-text">Magic the Gathering: The Brothers’ War Draft Booster Box</p>
-              <p class="card-text"> 2 Unidades Disponibles</p>
-              <p class="card-text">Valor: $126.990</p>
-              <button class="btn btn-outline-warning">Añadir al carrito</button>
-            </div>
-          </div>
-        </div>
-      </div>
   </div>
 {% endblock %}
