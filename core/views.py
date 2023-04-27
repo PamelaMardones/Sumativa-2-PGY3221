@@ -78,7 +78,7 @@ def register(request):
                 'username': user.username,
             })
 
-            if api_response.status_code != 200:
+            if api_response.status_code not in [200, 201]:
                 return render(request, 'core/registro.html', {'error': 'No se pudo registrar el usuario.'})
 
             return redirect('home')
