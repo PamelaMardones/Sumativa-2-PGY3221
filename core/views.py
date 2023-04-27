@@ -4,7 +4,19 @@ from django.contrib.auth.models import User
 import requests
 
 def home(request):
-    return render(request, 'dashboard/home.html')
+    #get orders_items from API. Last 5 order_items
+    api_response = requests.get('https://duocucpgy3221api-production.up.railway.app/api/order_items/last_five/')
+
+    #check if the response is ok
+    if api_response.status_code not in [200, 201]:
+        return redirect('home')
+
+    #get products from API filter by product_id in orders_items
+    products = [requests.get(f'https://duocucpgy3221api-production.up.railway.app/api/products/{order_item["product"]}/').json() for order_item in api_response.json()]
+
+    print(products)
+
+    return render(request, 'dashboard/home.html', {'products': products})
 
 def actualizar(request):
     if not request.user.is_authenticated:
@@ -12,7 +24,17 @@ def actualizar(request):
     return render(request, 'core/actualizar-perfil.html')
 
 def juegos_mesa(request):
-    return render(request, 'core/juegos-mesa.html')
+    #get products from API
+    api_response = requests.get('https://duocucpgy3221api-production.up.railway.app/api/products/')
+
+    #check if the response is ok    
+    if api_response.status_code not in [200, 201]:
+        return redirect('home')
+    
+    #filter products by type=3 and catergory=1
+    products = [product for product in api_response.json() if product['type'] == 3 and product['category'] == 1] 
+
+    return render(request, 'core/juegos-mesa.html', {'products': products})
 
 def magic(request):
     return render(request, 'core/magic.html')
@@ -55,7 +77,7 @@ def login_view(request):
             error_message = 'Nombre de usuario o contraseña incorrectos.'
             return render(request, 'dashboard/home.html', {'error_message': error_message})
     else:
-        return render(request, 'dashboard/home.html')
+        return redirect('home')
     
 def register(request):
     if request.method == 'POST':
@@ -86,6 +108,8 @@ def register(request):
             })
 
             if api_response.status_code not in [200, 201]:
+                # delete the user if the API request fails
+                user.delete()
                 return render(request, 'core/registro.html', {'error': 'No se pudo registrar el usuario.'})
 
             return redirect('home')
@@ -115,4 +139,4 @@ def update(request):
         # Redirigir a la página de inicio
         return redirect('home')
     else:
-        return render(request, 'core/home.html')
+        return redirect('home')

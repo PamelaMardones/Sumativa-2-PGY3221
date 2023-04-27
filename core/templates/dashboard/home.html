@@ -64,46 +64,18 @@
         <div class="container">
           <h2>Últimos productos vendidos</h2>
           <div class="row">
+            {% for product in products %}
             <div class="col-md-3">
               <div class="card">
-                <img src="{%static 'core/img/tablegame-images/dixit.webp'%}" class="img-card img-fluid" alt="dixit">
+                <img src="{{product.image}}" class="img-card img-fluid" alt="{{product.name}}">
                 <div class="card-body">
-                  <h5 class="card-title">Dixit</h5>
-                  <p class="card-text">Dixit, donde tu imaginación crea increíbles historias</p>
+                  <h5 class="card-title">{{product.name}}</h5>
+                  <p class="card-text">{{product.description}}</p>
                   <a href="#" class="btn btn-outline-warning">Agregar al carrito</a>
                 </div>
               </div>
             </div>
-            <div class="col-md-3">
-              <div class="card">
-                <img src="{%static 'core/img/cardgames-images/yugioh-images/dimension-force.jpeg'%}" class="img-card img-fluid" alt="dimension-force" >
-                <div class="card-body">
-                  <h5 class="card-title">Dimension Force</h5>
-                  <p class="card-text">Yu-Gi-Oh! Dimension Force Booster Box</p>
-                  <a href="#" class="btn btn-outline-warning">Agregar al carrito</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="card">
-                <img src="{%static 'core/img/cardgames-images/magic-images/brothers-war.webp'%}" class="img-card img-fluid" alt="magic-brothers-war">
-                <div class="card-body">
-                  <h5 class="card-title">Magic The Gathering The Brothers War</h5>
-                  <p class="card-text">Magic the Gathering: The Brothers’ War Draft Booster Box</p>
-                  <a href="#" class="btn btn-outline-warning">Agregar al carrito</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="card">
-                <img src="{%static 'core/img/cardgames-images/pokemon-images/klara-kit.jpeg'%}" class="img-card img-fluid" alt="klara-kit">
-                <div class="card-body">
-                  <h5 class="card-title">Pokémon Klara Collection</h5>
-                  <p class="card-text">Pokemon: Klara Premium Tournament Collection</p>
-                  <a href="#" class="btn btn-outline-warning">Agregar al carrito</a>
-                </div>
-              </div>
-            </div>
+            {% endfor %}
           </div>
         </div>
       </section>

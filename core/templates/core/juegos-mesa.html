@@ -2,74 +2,31 @@
 {%load static %}
 {% block content %}
 
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <h1 class="text-center">Juegos de mesa</h1>
-      </div>
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="text-center">Juegos de Mesa</h1>
     </div>
 
-    <div class="row row-cols-1 row-cols-md-3 g-8">
-      <div class="col">
-        <div class="card">
-            <img src="{%static 'core/img/tablegame-images/CatanElJuego-247x296.webp'%}" class="img-card img-fluid" alt="catan" >
+    </div>
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for product in products %}
+        <div class="col">
+          <div class="card">
+            <img src="{{product.image}}" class="img-card img-fluid" alt="{{product.name}}" >
             <div class="card-body">
-              <h5 class="card-title">Catan</h5>
-              <p class="card-text">Catan: El Juego, Standar Edition</p>
-              <p class="card-text"> 9 Unidades Disponibles</p>
-              <p class="card-text">Valor: $29.990</p>
+              <h5 class="card-title">{{product.name}}</h5>
+              <p class="card-text">{{product.description}}</p>
+              <p class="card-text"> {{product.qty}} Unidades Disponibles</p>
+              <p class="card-text">Valor: ${{product.price}}</p>
               <button class="btn btn-outline-warning">Añadir al carrito</button>
             </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card">
-          <img src="{%static 'core/img/tablegame-images/explodding-kittens.jpeg'%}" class="img-card img-fluid" alt="explodding-kittens" >
-          <div class="card-body">
-            <h5 class="card-title">Exploding Kittens</h5>
-            <p class="card-text">Exploding Kittens Español Edición original del juego de cartas</p>
-            <p class="card-text"> 6 Unidades Disponibles</p>
-            <p class="card-text">Valor: $19.990</p>
-            <button class="btn btn-outline-warning">Añadir al carrito</button>
           </div>
         </div>
-      </div>
-      <div class="col">
-        <div class="card">
-          <img src="{%static 'core/img/tablegame-images/dixit.webp'%}" class="img-card img-fluid" alt="dixit">
-          <div class="card-body">
-            <h5 class="card-title">Dixit</h5>
-            <p class="card-text">Dixit, donde tu imaginación crea increíbles historias</p>
-            <p class="card-text"> 2 Unidades Disponibles</p>
-            <p class="card-text">Valor: $26.990</p>
-            <button class="btn btn-outline-warning">Añadir al carrito</button>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card">
-          <img src="{%static 'core/img/tablegame-images/munchkin.webp'%}" class="img-card img-fluid" alt="munchkin">
-          <div class="card-body">
-            <h5 class="card-title">Munchkin</h5>
-            <p class="card-text">Munchkin, mata a los monstruos. Roba el tesoro. Apuñala a tus amigos.</p>
-            <p class="card-text"> 2 Unidades Disponibles</p>
-            <p class="card-text">Valor: $29.990</p>
-            <button class="btn btn-outline-warning">Añadir al carrito</button>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card">
-          <img src="{%static 'core/img/tablegame-images/carcasonne.webp'%}" class="img-card img-fluid" alt="carcasonne">
-          <div class="card-body">
-            <h5 class="card-title">Carcasonne</h5>
-            <p class="card-text">Carcassonne es un divertido juego de colocación de piezas y personajes.</p>
-            <p class="card-text"> 5 Unidades Disponibles</p>
-            <p class="card-text">Valor: $18.990</p>
-            <button class="btn btn-outline-warning">Añadir al carrito</button>
-          </div>
-        </div>
+      {% endfor %}
       </div>
     </div>
   </div>
+</div>
+
 {% endblock %}
