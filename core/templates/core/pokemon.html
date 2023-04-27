@@ -12,64 +12,18 @@
       <div class="row row-cols-1 row-cols-md-3 g-4">
         <div class="col">
           <div class="card">
-            <img src="{%static 'core/img/cardgames-images/pokemon-images/poke-violet-scarlet.jpeg'%}" class="img-card img-fluid" alt="pkm-violet-scarlet" >
+            {% for product in products%}
+            <img src="{{product.image}}" class="img-card img-fluid" alt="{{product.name}}" >
             <div class="card-body">
-              <h5 class="card-title">Pokémon Scarlet and Violet</h5>
-              <p class="card-text">Pokemon Scarlet & Violet 1: Booster Display</p>
-              <p class="card-text">9 Unidades Disponibles</p>
-              <p class="card-text">Valor: $128.990</p>
+              <h5 class="card-title"> {{product.name}}</h5>
+              <p class="card-text">{{product.descrption}}</p>
+              <p class="card-text">{{product.qty}} Unidades Disponibles</p>
+              <p class="card-text">Valor: ${{product.price}}</p>
               <button class="btn btn-outline-warning">Añadir al carrito</button>
             </div>
           </div>
         </div>
-        <div class="col">
-          <div class="card">
-            <img src="{%static 'core/img/cardgames-images/pokemon-images/pkm-celebrations-pikachu.png'%}" class="img-card img-fluid" alt="pkm-celebrations-pikachu" >
-            <div class="card-body">
-              <h5 class="card-title">Pokémon Celebrations</h5>
-              <p class="card-text">Pokemon Celebrations Special Collection: Pikachu V-Union</p>
-              <p class="card-text"> 2 Unidades Disponibles</p>
-              <p class="card-text">Valor: $32.990</p>
-              <button class="btn btn-outline-warning">Añadir al carrito</button>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img src="{%static 'core/img/cardgames-images/pokemon-images/dialga-vstar.png'%}" class="img-card img-fluid" alt="dialga-vstar">
-            <div class="card-body">
-              <h5 class="card-title">Pokémon Dialga VStar Collection</h5>
-              <p class="card-text">Pokemon: Dialga V-Star Premium Collection</p>
-              <p class="card-text"> 5 Unidades Disponibles</p>
-              <p class="card-text">Valor: $39.990</p>
-              <button class="btn btn-outline-warning">Añadir al carrito</button>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <img src="{%static 'core/img/cardgames-images/pokemon-images/klara-kit.jpeg'%}" class="img-card img-fluid" alt="klara-kit">
-            <div class="card-body">
-              <h5 class="card-title">Pokémon Klara Collection</h5>
-              <p class="card-text">Pokemon: Klara Premium Tournament Collection</p>
-              <p class="card-text"> 3 Unidades Disponibles</p>
-              <p class="card-text">Valor: $40.990</p>
-              <button class="btn btn-outline-warning">Añadir al carrito</button>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-            <div class="card">
-              <img src="{%static 'core/img/cardgames-images/pokemon-images/carpeta-pkm.jpeg'%}"class="img-card img-fluid" alt="carpeta-pkm">
-              <div class="card-body">
-                <h5 class="card-title">Pokémon mini-carpeta y sobre de cartas</h5>
-                <p class="card-text">Pokemon: Pack Mini-Portfolio + sobre Astral Radiance</p>
-                <p class="card-text"> 8 Unidades Disponibles</p>
-                <p class="card-text">Valor: $6.990</p>
-                <button class="btn btn-outline-warning">Añadir al carrito</button>
-              </div>
-            </div>
-          </div>
+        {% endfor %}
       </div>
   </div>
 {% endblock %}
