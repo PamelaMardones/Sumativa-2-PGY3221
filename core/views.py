@@ -2,6 +2,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
+import requests
 
 def home(request):
     return render(request, 'dashboard/home.html')
@@ -44,7 +45,7 @@ def login_view(request):
             return redirect('home')
         else:
             # Mostrar mensaje de error de inicio de sesión
-            error_message = 'Correo electrónico o contraseña incorrectos.'
+            error_message = 'Nombre de usuario o contraseña incorrectos.'
             return render(request, 'dashboard/home.html', {'error_message': error_message})
     else:
         return render(request, 'dashboard/home.html')
@@ -70,6 +71,16 @@ def register(request):
             # Autenticar al usuario y redirigir a la página de inicio
             auth_user = authenticate(username=username, password=password)
             login(request, auth_user)
+
+            # save the user on API
+            api_response = requests.post('https://duocucpgy3221api-production.up.railway.app/api/users/', data={
+                'id': user.id,
+                'username': user.username,
+            })
+
+            if api_response.status_code != 200:
+                return render(request, 'core/registro.html', {'error': 'No se pudo registrar el usuario.'})
+
             return redirect('home')
         else:
             # Mostrar un error si las contraseñas no coinciden
@@ -97,4 +108,4 @@ def update(request):
         # Redirigir a la página de inicio
         return redirect('home')
     else:
-        return render(request, 'core/registro.html')
+        return render(request, 'core/home.html')
