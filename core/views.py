@@ -3,6 +3,30 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 import requests
 
+def get_cart(request):
+    api_response = requests.get(f'https://duocucpgy3221api-production.up.railway.app/api/cart/get_cart/?user={request.user.id}')
+
+    #check if the response is ok
+    if api_response.status_code not in [200, 201]:
+        api_response = requests.post('https://duocucpgy3221api-production.up.railway.app/api/cart/create_cart/', json={'user': request.user.id})
+
+        #check if the response is ok
+        if api_response.status_code not in [200, 201]:
+            #redirect to home and send alert
+            return redirect('home')
+
+        #get cart from API
+        api_response = requests.get(f'https://duocucpgy3221api-production.up.railway.app/api/cart/get_cart/?user={request.user.id}')
+
+        #check if the response is ok
+        if api_response.status_code not in [200, 201]:
+            #redirect to home and send alert
+            return redirect('home')
+        
+    cart = api_response.json()
+
+    return cart
+
 def home(request):
     #get orders_items from API. Last 5 order_items
     api_response = requests.get('https://duocucpgy3221api-production.up.railway.app/api/order_items/last_five/')
@@ -17,36 +41,18 @@ def home(request):
     #if the user is not authenticated, render the template with the products
     if not request.user.is_authenticated:
         return render(request, 'dashboard/home.html', {'products': products})
-
-    api_response = requests.get(f'https://duocucpgy3221api-production.up.railway.app/api/cart/get_cart/?user={request.user.id}')
-
-    #check if the response is ok
-    if api_response.status_code not in [200, 201]:
-        api_response = requests.post('https://duocucpgy3221api-production.up.railway.app/api/cart/create_cart/', json={'user': request.user.id})
-
-        #check if the response is ok
-        if api_response.status_code not in [200, 201]:
-            #redirect to home and send alert
-            return render(request, 'dashboard/home.html', {'error': 'No se pudo crear el carrito.', 'products': products})
-
-        print(api_response.json())
-        #get cart from API
-        api_response = requests.get(f'https://duocucpgy3221api-production.up.railway.app/api/cart/get_cart/?user={request.user.id}')
-
-        print(api_response.json())
-        #check if the response is ok
-        if api_response.status_code not in [200, 201]:
-            #redirect to home and send alert
-            return render(request, 'dashboard/home.html', {'error': 'No se pudo obtener el carrito.', 'products': products})
         
-    cart = api_response.json()
+    cart = get_cart(request)
 
     return render(request, 'dashboard/home.html', {'products': products, 'cart': cart})
 
 def actualizar(request):
     if not request.user.is_authenticated:
         return redirect('home')
-    return render(request, 'core/actualizar-perfil.html')
+    
+    cart = get_cart(request)
+
+    return render(request, 'core/actualizar-perfil.html', {'cart': cart})
 
 def juegos_mesa(request):
     #get products from API
@@ -59,7 +65,12 @@ def juegos_mesa(request):
     #filter products by type=3 and catergory=1
     products = [product for product in api_response.json() if product['type'] == 3 and product['category'] == 1] 
 
-    return render(request, 'core/juegos-mesa.html', {'products': products})
+    if not request.user.is_authenticated:
+        return render(request, 'core/juegos-mesa.html', {'products': products})
+    
+    cart = get_cart(request)
+
+    return render(request, 'core/juegos-mesa.html', {'products': products, 'cart': cart})
 
 def magic(request):
     api_response = requests.get('https://duocucpgy3221api-production.up.railway.app/api/products/')
@@ -68,7 +79,13 @@ def magic(request):
         return redirect('home')
 
     products = [product for product in api_response.json() if product['type'] == 1 and product['category'] == 0] 
-    return render(request, 'core/magic.html', {'products': products})
+
+    if not request.user.is_authenticated:
+        return render(request, 'core/magic.html', {'products': products})
+    
+    cart = get_cart(request)
+
+    return render(request, 'core/magic.html', {'products': products, 'cart': cart})
 
 def pokemon(request):
     return render(request, 'core/pokemon.html')
@@ -87,8 +104,13 @@ def yugioh(request):
     #filter products by type=0 and catergory=2
     products = [product for product in api_response.json() if product['type'] == 2 and product['category'] == 0] 
 
+    if not request.user.is_authenticated:
+        return render(request, 'core/yugioh.html', {'products': products})
+    
+    cart = get_cart(request)
+
     #render the template with the products
-    return render(request, 'core/yugioh.html', {'products': products})
+    return render(request, 'core/yugioh.html', {'products': products, 'cart': cart})
 
 def logout_view(request):
     logout(request)
