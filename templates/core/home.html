@@ -15,6 +15,7 @@
 </head>
 <body>
   {% include 'core/body.html' %}
+  {% load humanize %}
 
   {% block content %}
   {% endblock %}
@@ -27,7 +28,41 @@
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-      <p>No hay productos en el carrito</p>
+      {% if cart.products %}
+      <ul class="list-group">
+        {% for item in cart.products %}
+          <!-- Add mini image, name, unit price and qty-->
+          <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+              <img src="{{item.image}}" class="img-fluid" alt="{{item.name}}" width="50">
+              <div class="fw-bold">{{item.name}}</div>
+              <div class="fw-bold">Cantidad: {{item.qty}}</div>
+            </div>
+            <div class="text-end">
+              <div class="fw-bold">{{item.unit_price|floatformat:0|intcomma}}</div>
+              <!--Format subtotal to format . separator and none decimal-->
+              <div class="fw-bold">{{item.total_price|floatformat:0|intcomma}}</div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+      <hr>
+      <div class="d-flex justify-content-between align-items-start">
+        <div class="fw-bold">Total</div>
+        <div class="fw-bold">{{cart.total|floatformat:0|intcomma}}</div>
+      </div>
+      <hr>
+      <a href="{% url 'cart' cart.cart_id %}" class="btn btn-outline-primary">Ir al carrito</a>
+      <!-- else if not authenticated-->
+      {% elif request.user.is_authenticated %}
+      <div class="text-center">
+        <p class="fw-bold">No hay productos en el carrito</p>
+      </div>
+      {% else %}
+      <div class="text-center">
+        <p class="fw-bold">Inicia sesión para agregar productos al carrito</p>
+      </div>
+      {% endif %}
     </div>
   </div>
 

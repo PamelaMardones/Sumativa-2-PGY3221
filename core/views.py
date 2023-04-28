@@ -9,14 +9,39 @@ def home(request):
 
     #check if the response is ok
     if api_response.status_code not in [200, 201]:
-        return redirect('home')
+        return render(request, 'dashboard/home.html', {'error': 'No se pudo obtener los productos.'})
 
     #get products from API filter by product_id in orders_items
     products = [requests.get(f'https://duocucpgy3221api-production.up.railway.app/api/products/{order_item["product"]}/').json() for order_item in api_response.json()]
 
-    print(products)
+    #if the user is not authenticated, render the template with the products
+    if not request.user.is_authenticated:
+        return render(request, 'dashboard/home.html', {'products': products})
 
-    return render(request, 'dashboard/home.html', {'products': products})
+    api_response = requests.get(f'https://duocucpgy3221api-production.up.railway.app/api/cart/get_cart/?user={request.user.id}')
+
+    #check if the response is ok
+    if api_response.status_code not in [200, 201]:
+        api_response = requests.post('https://duocucpgy3221api-production.up.railway.app/api/cart/create_cart/', json={'user': request.user.id})
+
+        #check if the response is ok
+        if api_response.status_code not in [200, 201]:
+            #redirect to home and send alert
+            return render(request, 'dashboard/home.html', {'error': 'No se pudo crear el carrito.', 'products': products})
+
+        print(api_response.json())
+        #get cart from API
+        api_response = requests.get(f'https://duocucpgy3221api-production.up.railway.app/api/cart/get_cart/?user={request.user.id}')
+
+        print(api_response.json())
+        #check if the response is ok
+        if api_response.status_code not in [200, 201]:
+            #redirect to home and send alert
+            return render(request, 'dashboard/home.html', {'error': 'No se pudo obtener el carrito.', 'products': products})
+        
+    cart = api_response.json()
+
+    return render(request, 'dashboard/home.html', {'products': products, 'cart': cart})
 
 def actualizar(request):
     if not request.user.is_authenticated:
@@ -41,7 +66,7 @@ def magic(request):
 
     if api_response.status_code not in [200, 201]:
         return redirect('home')
-    
+
     products = [product for product in api_response.json() if product['type'] == 1 and product['category'] == 0] 
     return render(request, 'core/magic.html', {'products': products})
 
@@ -67,8 +92,18 @@ def yugioh(request):
 
 def logout_view(request):
     logout(request)
-    return render(request, 'dashboard/home.html')
 
+    #get orders_items from API. Last 5 order_items
+    api_response = requests.get('https://duocucpgy3221api-production.up.railway.app/api/order_items/last_five/')
+
+    #check if the response is ok
+    if api_response.status_code not in [200, 201]:
+        return render(request, 'dashboard/home.html', {'error': 'No se pudo obtener los productos.'})
+
+    #get products from API filter by product_id in orders_items
+    products = [requests.get(f'https://duocucpgy3221api-production.up.railway.app/api/products/{order_item["product"]}/').json() for order_item in api_response.json()]
+
+    return render(request, 'dashboard/home.html', {'products': products})
 
 def login_view(request):
     if request.method == 'POST':
@@ -146,3 +181,120 @@ def update(request):
         return redirect('home')
     else:
         return redirect('home')
+    
+def cart(request, cart_id):
+    #get cart from API
+    api_response = requests.get(f'https://duocucpgy3221api-production.up.railway.app/api/cart/get_cart/?user={request.user.id}')
+
+    #check if the response is ok
+    if api_response.status_code not in [200, 201]:
+        #redirect to home and send alert
+        return redirect('home', {'error': 'No se pudo obtener el carrito.'})
+    
+    cart = api_response.json()
+
+    return render(request, 'core/cart.html', {'cart': cart})
+
+def add_to_cart(request, cart_id, product_id):
+    #get cart from API
+    api_response = requests.get(f'https://duocucpgy3221api-production.up.railway.app/api/cart/{cart_id}/')
+
+    #check if the response is ok
+    if api_response.status_code not in [200, 201]:
+        #redirect to home and send alert
+        return redirect('home', {'error': 'No se pudo obtener el carrito.'})
+    
+    cart = api_response.json()
+
+    #if cart is_checked_out, redirect to home and send alert
+    if cart['is_checked_out']:
+        return redirect('home', {'error': 'No se pudo agregar el producto.'})
+    
+    #get product from API
+    api_response = requests.get(f'https://duocucpgy3221api-production.up.railway.app/api/products/{product_id}/')
+
+    #check if the response is ok
+    if api_response.status_code not in [200, 201]:
+        #redirect to home and send alert
+        return redirect('home', {'error': 'No se pudo obtener el producto.'})
+    
+    product = api_response.json()
+
+    #add product to cart
+    api_response = requests.post(f'https://duocucpgy3221api-production.up.railway.app/api/cart/{cart_id}/add_to_cart/', data={
+        'product': product_id,
+        'qty': 1
+    })
+
+    print(api_response.json())
+
+    #check if the response is ok
+    if api_response.status_code not in [200, 201]:
+        #redirect to home and send alert
+        return redirect('home', {'error': 'No se pudo agregar el producto.'})
+    
+    #return to same page
+    return redirect('cart', cart_id=cart_id)
+
+def remove_from_cart(request, cart_id, product_id):
+    #get cart where is_checked_out=False for his user
+    api_response = requests.get(f'https://duocucpgy3221api-production.up.railway.app/api/cart/get_cart/?user={request.user.id}')
+
+
+    #check if the response is ok
+    if api_response.status_code not in [200, 201]:
+        #redirect to home and send alert
+        return render(request, 'core/cart.html', {'error': 'No se pudo obtener el carrito.'})
+    
+    cart = api_response.json()
+
+    #if cart is_checked_out, redirect to home and send alert
+    if cart['is_checked_out']:
+        return render(request, 'core/cart.html', {'cart': cart, 'error': 'No se pudo eliminar el producto.'})
+
+    #get product from API
+    api_response = requests.get(f'https://duocucpgy3221api-production.up.railway.app/api/products/{product_id}/')
+
+    #check if the response is ok
+    if api_response.status_code not in [200, 201]:
+        #redirect to home and send alert
+        return render(request, 'core/cart.html', {'cart': cart, 'error': 'No se pudo obtener el producto.'})
+
+    #remove product from cart in API (product send in json)
+    api_response = requests.delete(f'https://duocucpgy3221api-production.up.railway.app/api/cart/{cart_id}/remove_from_cart/', data={
+        'product': product_id
+    })
+    
+    print(api_response.json())
+
+    #check if the response is ok
+    if api_response.status_code not in [200, 201]:
+        #redirect to home and send alert
+        return render(request, 'core/cart.html', {'cart': cart, 'error': 'No se pudo eliminar el producto.'})
+
+    return redirect('cart', cart_id=cart_id)
+
+def checkout(request, cart_id):
+    #get cart from API
+    api_response = requests.get(f'https://duocucpgy3221api-production.up.railway.app/api/cart/{cart_id}/')
+
+    #check if the response is ok
+    if api_response.status_code not in [200, 201]:
+        #redirect to home and send alert
+        return redirect('home', {'error': 'No se pudo obtener el carrito.'})
+    
+    cart = api_response.json()
+
+    #if cart is_checked_out, redirect to home and send alert
+    if cart['is_checked_out']:
+        return render(request, 'core/cart.html', {'cart': cart, 'error': 'El carrito ya fue pagado.'})
+    
+    #update cart in API
+    api_response = requests.post(f'https://duocucpgy3221api-production.up.railway.app/api/cart/{cart_id}/checked_out/')
+
+    #check if the response is ok
+    if api_response.status_code not in [200, 201]:
+        #redirect to home and send alert
+        return redirect('cart', cart_id=cart_id)
+    
+    return redirect('home')
