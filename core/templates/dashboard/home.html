@@ -73,9 +73,9 @@
                   <div class="card-body">
                     <h5 class="card-title">{{product.name}}</h5>
                     <p class="card-text">{{product.description}}</p>
-                    <p class="card-text"><small class="text-muted">{{product.price|format_amount}}</small></p>
+                    <p class="card-text"><small class="text-muted">${{product.price|format_amount}}</small></p>
                     {% if request.user.is_authenticated %}
-                    <a href="{% url 'add_to_cart' cart.cart_id product.id %}" class="btn btn-primary">Añadir al carrito</a>
+                    <a href="{% url 'add_to_cart' cart.cart_id product.id %}" class="btn btn-outline-warning">Añadir al carrito</a>
                     {% else %}
                     <p class="card-text"><small class="text-muted">Inicia sesión para añadir al carrito</small></p>
                     {% endif %}
@@ -147,8 +147,8 @@
               <div class="fw-bold">Cantidad: {{item.qty}}</div>
             </div>
             <div class="text-end">
-              <div class="fw-bold">{{item.unit_price|format_amount}}</div>
-              <div class="fw-bold">Subtotal: {{item.total_price|format_amount}}</div>
+              <div class="fw-bold">${{item.unit_price|format_amount}}</div>
+              <div class="fw-bold">Subtotal: ${{item.total_price|format_amount}}</div>
             </div>
           </li>
         {% endfor %}
@@ -156,7 +156,7 @@
       <hr>
       <div class="d-flex justify-content-between align-items-start">
         <div class="fw-bold">Total</div>
-        <div class="fw-bold">{{cart.total|format_amount}}</div>
+        <div class="fw-bold">${{cart.total|format_amount}}</div>
       </div>
       <hr>
       <a href="{% url 'cart' cart.cart_id %}" class="btn btn-outline-primary">Ir al carrito</a>

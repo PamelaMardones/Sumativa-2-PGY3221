@@ -1,6 +1,7 @@
 {% extends 'core/home.html' %}
 {%load static %}
 {% block content %}
+{%load format_amount%}
 
   <div class="container">
     <div class="row">
@@ -18,8 +19,12 @@
                 <h5 class="card-title">{{product.name}}</h5>
                 <p class="card-text">{{product.description}}</p>
                 <p class="card-text"> {{product.qty}} Unidades Disponibles</p>
-                <p class="card-text">Valor: ${{product.price}}</p>
-                <button class="btn btn-outline-warning">Añadir al carrito</button>
+                <p class="card-text">Valor: ${{product.price|format_amount}}</p>
+                {% if request.user.is_authenticated %}
+                <a href="{% url 'add_to_cart' cart.cart_id product.id %}" class="btn btn-outline-warning">Añadir al carrito</a>
+                {% else %}
+                <p class="card-text"><small class="text-muted">Inicia sesión para añadir al carrito</small></p>
+                {% endif %}
               </div>
             </div>
           </div>

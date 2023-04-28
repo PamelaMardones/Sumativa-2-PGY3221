@@ -39,9 +39,9 @@
               <div class="fw-bold">Cantidad: {{item.qty}}</div>
             </div>
             <div class="text-end">
-              <div class="fw-bold">{{item.unit_price|floatformat:0|intcomma}}</div>
+              <div class="fw-bold">${{item.unit_price|floatformat:0|intcomma}}</div>
               <!--Format subtotal to format . separator and none decimal-->
-              <div class="fw-bold">{{item.total_price|floatformat:0|intcomma}}</div>
+              <div class="fw-bold">${{item.total_price|floatformat:0|intcomma}}</div>
             </div>
           </li>
         {% endfor %}
@@ -49,7 +49,7 @@
       <hr>
       <div class="d-flex justify-content-between align-items-start">
         <div class="fw-bold">Total</div>
-        <div class="fw-bold">{{cart.total|floatformat:0|intcomma}}</div>
+        <div class="fw-bold">${{cart.total|floatformat:0|intcomma}}</div>
       </div>
       <hr>
       <a href="{% url 'cart' cart.cart_id %}" class="btn btn-outline-primary">Ir al carrito</a>
