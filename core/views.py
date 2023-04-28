@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
@@ -12,7 +13,7 @@ def get_cart(request):
 
         #check if the response is ok
         if api_response.status_code not in [200, 201]:
-            #redirect to home and send alert
+            messages.add_message(request, messages.ERROR, 'No se pudo crear el carrito.')
             return redirect('home')
 
         #get cart from API
@@ -20,7 +21,7 @@ def get_cart(request):
 
         #check if the response is ok
         if api_response.status_code not in [200, 201]:
-            #redirect to home and send alert
+            messages.add_message(request, messages.ERROR, 'No se pudo obtener el carrito.')
             return redirect('home')
         
     cart = api_response.json()
@@ -48,6 +49,7 @@ def home(request):
 
 def actualizar(request):
     if not request.user.is_authenticated:
+        messages.add_message(request, messages.ERROR, 'Debes iniciar sesión para actualizar tu perfil.')
         return redirect('home')
     
     cart = get_cart(request)
@@ -60,6 +62,7 @@ def juegos_mesa(request):
 
     #check if the response is ok    
     if api_response.status_code not in [200, 201]:
+        messages.add_message(request, messages.ERROR, 'No se pudo obtener los productos.')
         return redirect('home')
     
     #filter products by type=3 and catergory=1
@@ -76,6 +79,7 @@ def magic(request):
     api_response = requests.get('https://duocucpgy3221api-production.up.railway.app/api/products/')
 
     if api_response.status_code not in [200, 201]:
+        messages.add_message(request, messages.ERROR, 'No se pudo obtener los productos.')
         return redirect('home')
 
     products = [product for product in api_response.json() if product['type'] == 1 and product['category'] == 0] 
@@ -99,6 +103,7 @@ def yugioh(request):
 
     #check if the response is ok    
     if api_response.status_code not in [200, 201]:
+        messages.add_message(request, messages.ERROR, 'No se pudo obtener los productos.')
         return redirect('home')
     
     #filter products by type=0 and catergory=2
@@ -120,6 +125,7 @@ def logout_view(request):
 
     #check if the response is ok
     if api_response.status_code not in [200, 201]:
+        messages.add_message(request, messages.ERROR, 'No se pudo obtener los productos.')
         return render(request, 'dashboard/home.html', {'error': 'No se pudo obtener los productos.'})
 
     #get products from API filter by product_id in orders_items
@@ -137,9 +143,10 @@ def login_view(request):
             return redirect('home')
         else:
             # Mostrar mensaje de error de inicio de sesión
-            error_message = 'Nombre de usuario o contraseña incorrectos.'
-            return render(request, 'dashboard/home.html', {'error_message': error_message})
+            messages.add_message(request, messages.INFO, 'Usuario o contraseña incorrectos.')
+            return render(request, 'dashboard/home.html')
     else:
+        messages.add_message(request, messages.INFO, 'Error al iniciar sesión.')
         return redirect('home')
     
 def register(request):
@@ -171,16 +178,18 @@ def register(request):
             })
 
             if api_response.status_code not in [200, 201]:
-                # delete the user if the API request fails
+                messages.add_message(request, messages.ERROR, 'No se pudo registrar el usuario.')
                 user.delete()
-                return render(request, 'core/registro.html', {'error': 'No se pudo registrar el usuario.'})
+                return render(request, 'core/registro.html')
 
+            messages.add_message(request, messages.SUCCESS, 'Usuario registrado correctamente.')
             return redirect('home')
         else:
             # Mostrar un error si las contraseñas no coinciden
-            error_msg = "Las contraseñas no coinciden."
-            return render(request, 'core/registro.html', {'error': error_msg})
+            messages.add_message(request, messages.ERROR, 'Las contraseñas no coinciden.')
+            return render(request, 'core/registro.html')
     else:
+        messages.add_message(request, messages.ERROR, 'No se pudo registrar el usuario.')
         return render(request, 'core/registro.html')
     
 def update(request):
@@ -199,7 +208,7 @@ def update(request):
         usuario.email = email
         usuario.save()
 
-        # Redirigir a la página de inicio
+        messages.add_message(request, messages.SUCCESS, 'Datos actualizados correctamente.')
         return redirect('home')
     else:
         return redirect('home')
@@ -210,52 +219,59 @@ def cart(request, cart_id):
 
     #check if the response is ok
     if api_response.status_code not in [200, 201]:
+        messages.add_message(request, messages.ERROR, 'No se pudo obtener el carrito.')
         #redirect to home and send alert
-        return redirect('home', {'error': 'No se pudo obtener el carrito.'})
+        return redirect('home')
     
     cart = api_response.json()
 
     return render(request, 'core/cart.html', {'cart': cart})
 
 def add_to_cart(request, cart_id, product_id):
+    #get qty from request
+    qty = request.POST.get('qty')
+
+    if not qty:
+        qty = 1
+
     #get cart from API
     api_response = requests.get(f'https://duocucpgy3221api-production.up.railway.app/api/cart/{cart_id}/')
 
     #check if the response is ok
     if api_response.status_code not in [200, 201]:
+        messages.add_message(request, messages.ERROR, 'No se pudo obtener el carrito.')
         #redirect to home and send alert
-        return redirect('home', {'error': 'No se pudo obtener el carrito.'})
+        return redirect('home')
     
     cart = api_response.json()
 
     #if cart is_checked_out, redirect to home and send alert
     if cart['is_checked_out']:
-        return redirect('home', {'error': 'No se pudo agregar el producto.'})
+        messages.add_message(request, messages.ERROR, 'No se pudo agregar el producto.')
+        return redirect('home')
     
     #get product from API
     api_response = requests.get(f'https://duocucpgy3221api-production.up.railway.app/api/products/{product_id}/')
 
     #check if the response is ok
     if api_response.status_code not in [200, 201]:
+        messages.add_message(request, messages.ERROR, 'No se pudo obtener el producto.')
         #redirect to home and send alert
-        return redirect('home', {'error': 'No se pudo obtener el producto.'})
-    
-    product = api_response.json()
+        return redirect('home')
 
     #add product to cart
     api_response = requests.post(f'https://duocucpgy3221api-production.up.railway.app/api/cart/{cart_id}/add_to_cart/', data={
         'product': product_id,
-        'qty': 1
+        'qty': qty
     })
-
-    print(api_response.json())
 
     #check if the response is ok
     if api_response.status_code not in [200, 201]:
+        messages.add_message(request, messages.ERROR, 'No se pudo agregar el producto.')
         #redirect to home and send alert
-        return redirect('home', {'error': 'No se pudo agregar el producto.'})
+        return redirect('home')
     
-    #return to same page
+    messages.add_message(request, messages.SUCCESS, 'Producto agregado correctamente.')
     return redirect('cart', cart_id=cart_id)
 
 def remove_from_cart(request, cart_id, product_id):
@@ -265,14 +281,16 @@ def remove_from_cart(request, cart_id, product_id):
 
     #check if the response is ok
     if api_response.status_code not in [200, 201]:
+        messages.add_message(request, messages.ERROR, 'No se pudo obtener el carrito.')
         #redirect to home and send alert
-        return render(request, 'core/cart.html', {'error': 'No se pudo obtener el carrito.'})
+        return render(request, 'core/cart.html')
     
     cart = api_response.json()
 
     #if cart is_checked_out, redirect to home and send alert
     if cart['is_checked_out']:
-        return render(request, 'core/cart.html', {'cart': cart, 'error': 'No se pudo eliminar el producto.'})
+        messages.add_message(request, messages.ERROR, 'Este carrito ya fue pagado.')
+        return render(request, 'core/cart.html', {'cart': cart})
 
     #get product from API
     api_response = requests.get(f'https://duocucpgy3221api-production.up.railway.app/api/products/{product_id}/')
@@ -280,20 +298,21 @@ def remove_from_cart(request, cart_id, product_id):
     #check if the response is ok
     if api_response.status_code not in [200, 201]:
         #redirect to home and send alert
-        return render(request, 'core/cart.html', {'cart': cart, 'error': 'No se pudo obtener el producto.'})
+        messages.add_message(request, messages.ERROR, 'No se pudo obtener el producto.')
+        return render(request, 'core/cart.html', {'cart': cart})
 
     #remove product from cart in API (product send in json)
     api_response = requests.delete(f'https://duocucpgy3221api-production.up.railway.app/api/cart/{cart_id}/remove_from_cart/', data={
         'product': product_id
     })
-    
-    print(api_response.json())
 
     #check if the response is ok
     if api_response.status_code not in [200, 201]:
+        messages.add_message(request, messages.ERROR, 'No se pudo eliminar el producto.')
         #redirect to home and send alert
-        return render(request, 'core/cart.html', {'cart': cart, 'error': 'No se pudo eliminar el producto.'})
+        return render(request, 'core/cart.html', {'cart': cart})
 
+    messages.add_message(request, messages.SUCCESS, 'Producto eliminado del carrito.')
     return redirect('cart', cart_id=cart_id)
 
 def checkout(request, cart_id):
@@ -302,21 +321,24 @@ def checkout(request, cart_id):
 
     #check if the response is ok
     if api_response.status_code not in [200, 201]:
+        messages.add_message(request, messages.ERROR, 'No se pudo realizar la compra.')
         #redirect to home and send alert
-        return redirect('home', {'error': 'No se pudo obtener el carrito.'})
+        return redirect('home')
     
     cart = api_response.json()
 
     #if cart is_checked_out, redirect to home and send alert
     if cart['is_checked_out']:
-        return render(request, 'core/cart.html', {'cart': cart, 'error': 'El carrito ya fue pagado.'})
+        messages.add_message(request, messages.ERROR, 'Este carrito ya fue pagado.')
+        return render(request, 'core/cart.html', {'cart': cart})
     
     #update cart in API
     api_response = requests.post(f'https://duocucpgy3221api-production.up.railway.app/api/cart/{cart_id}/checked_out/')
 
     #check if the response is ok
     if api_response.status_code not in [200, 201]:
-        #redirect to home and send alert
+        messages.add_message(request, messages.ERROR, 'No se pudo realizar la compra.')
         return redirect('cart', cart_id=cart_id)
     
+    messages.add_message(request, messages.SUCCESS, 'Compra realizada con éxito.')
     return redirect('home')

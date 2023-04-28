@@ -16,6 +16,11 @@
 <body>
   {% include 'core/body.html' %}
   {%load format_amount%}
+  {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
 
   <div class="container">
     <div class="row">
@@ -69,7 +74,7 @@
               <div class="card-group">
                 {% for product in products %}
                 <div class="card">
-                  <img src="{{product.image}}" class="card-img-top" alt="...">
+                  <img src="{{product.image}}" class="img-fluid rounded img-size-200" alt="...">
                   <div class="card-body">
                     <h5 class="card-title">{{product.name}}</h5>
                     <p class="card-text">{{product.description}}</p>
@@ -142,7 +147,7 @@
           <!-- Add mini image, name, unit price and qty-->
           <li class="list-group-item d-flex justify-content-between align-items-start">
             <div class="ms-2 me-auto">
-              <img src="{{item.image}}" class="img-fluid" alt="{{item.name}}" width="50">
+              <img src="{{item.image}}" class="img-thumbnail rounded" alt="{{item.name}}" width="50">
               <div class="fw-bold">{{item.name}}</div>
               <div class="fw-bold">Cantidad: {{item.qty}}</div>
             </div>

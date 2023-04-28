@@ -2,6 +2,11 @@
 {%load static %}
 {% block content %}
 {%load format_amount%}
+{% if messages %}
+  {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+{% endif %}
 
   <div class="container">
     <div class="row">
@@ -21,7 +26,14 @@
                 <p class="card-text"> {{product.qty}} Unidades Disponibles</p>
                 <p class="card-text">Valor: ${{product.price|format_amount}}</p>
                 {% if request.user.is_authenticated %}
-                <a href="{% url 'add_to_cart' cart.cart_id product.id %}" class="btn btn-outline-warning">Añadir al carrito</a>
+                <form action="{% url 'add_to_cart' cart.cart_id product.id %}" method="POST" class="form-inline">
+                  {% csrf_token %}
+                  
+                  <label for="qty">Cantidad:</label>
+                  <input type="number" class="form-control" name="qty" id="qty" value="1" min="1" max="{{product.qty}}" class="mb-2 mr-sm-2">
+                  <br>
+                  <button type="submit" class="btn btn-outline-warning mb-2 mr-sm-2">Añadir al carrito</button>
+                </form>
                 {% else %}
                 <p class="card-text"><small class="text-muted">Inicia sesión para añadir al carrito</small></p>
                 {% endif %}
