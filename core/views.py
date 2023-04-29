@@ -92,7 +92,6 @@ def magic(request):
     return render(request, 'core/magic.html', {'products': products, 'cart': cart})
 
 def pokemon(request):
-    return render(request, 'core/pokemon.html')
     #get products from API
     api_response = requests.get('https://duocucpgy3221api-production.up.railway.app/api/products/')
     #check if the response is ok    
@@ -102,8 +101,13 @@ def pokemon(request):
     #filter products by type=0 and catergory=2
     products = [product for product in api_response.json() if product['type'] == 2 and product['category'] == 0] 
 
+    if not request.user.is_authenticated:
+        return render(request, 'core/magic.html', {'products': products})
+    
+    cart = get_cart(request)
+
     #render the template with the products
-    return render(request, 'core/pokemon.html', {'products': products})
+    return render(request, 'core/pokemon.html', {'products': products, 'cart': cart})
 
 def registro(request):
     return render(request, 'core/registro.html')
