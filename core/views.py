@@ -1,3 +1,4 @@
+from os import replace
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
@@ -379,3 +380,74 @@ def search(request):
     cart = get_cart(request)
 
     return render(request, 'core/search.html', {'products': products, 'search_term': search_term, 'cart': cart})
+
+def pokedex(request):
+    page_number = request.GET.get('page_number', 0)
+    limit = request.GET.get('limit', 12)
+    offset = request.GET.get('offset', 0)
+
+    page_number = int(page_number)
+    limit = int(limit)
+    offset = int(offset.replace(',', ''))
+
+    current_page = f'https://pokeapi.co/api/v2/pokemon/?limit={limit}&offset={offset}'
+
+    #get pokemons from API
+    api_response = requests.get(current_page)
+
+    #check if the response is ok
+    if api_response.status_code not in [200, 201]:
+        messages.add_message(request, messages.ERROR, 'No se encontraron pokemones.')
+        #redirect to home and send alert
+        return redirect('home')
+    
+    pokemon_list = api_response.json()
+
+    for pokemon in pokemon_list['results']:
+        api_response = requests.get(pokemon['url'])
+
+        result = api_response.json()
+
+        pokemon['id'] = result['id']
+        pokemon['abilities'] = result['abilities']
+        pokemon['height'] = result['height']
+        pokemon['weight'] = result['weight']
+        pokemon['types'] = result['types']
+        pokemon['image'] = result['sprites']['front_default']
+        pokemon['types'] = result['types']
+        pokemon['stats'] = result['stats']
+
+    total_pages = int(pokemon_list['count']) / limit
+    total_pages = int(total_pages)
+
+    pages_info = []
+    x = 1
+    #for 10 pages from current page to total pages
+    for i in range(page_number, page_number + 10):
+        if page_number + x <= total_pages:
+            print(i)
+            next_page = {}
+            next_page['page_number'] = page_number + x
+            next_page['limit'] = limit
+            next_page['offset'] = offset + (limit * x)
+            pages_info.append(next_page)
+        x += 1
+        print('x' + str(x))
+
+    pokemon_list['pagination'] = {
+        'final_page': total_pages,
+        'final_offset': int(total_pages * limit),
+        'current_page': page_number,
+        'previous_page': page_number - 1,
+        'previous_offset': offset - limit,
+        'next_page': page_number + 1,
+        'next_offset': offset + limit,
+        'next_pages': pages_info
+    }
+
+    if not request.user.is_authenticated:
+        return render(request, 'core/pokedex.html', {'pokemon_list': pokemon_list, 'page_number': page_number})
+    
+    cart = get_cart(request)
+
+    return render(request, 'core/pokedex.html', {'pokemon_list': pokemon_list, 'cart': cart})

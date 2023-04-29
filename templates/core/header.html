@@ -9,6 +9,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
+            <a href="{% url 'pokedex'%}"><h1 class="btn btn-primary btn-8bit-pokedex">Pokedex</h1></a>
             <form class="d-flex mx-auto" action="{% url 'search'%}" method="POST">
             {% csrf_token %}
             <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search" name="search_term" id="search_term">

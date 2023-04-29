@@ -1,0 +1,115 @@
+{% extends 'core/home.html' %}
+{%load static %}
+{% block content %}
+{%load format_amount%}
+{% if messages %}
+  {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+{% endif %}
+
+<!--search pokedex-->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <form action="{% url 'pokedex' %}" method="GET">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Buscar pokemon" name="search" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Buscar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+      {% for pokemon in pokemon_list.results %}
+        <div class="col-sm-4">
+          <div class="card card-pokedex">
+            <div class="card-body">
+              <h5 class="card-title card-title-pokedex">#{{pokemon.id}} {{ pokemon.name }}</h5>
+              <img src="{{ pokemon.image }}" alt="{{ pokemon.name }}">
+              <a href="#" class="btn btn-primary-pokedex" data-bs-toggle="modal" data-bs-target="#pokemonModal{{ pokemon.name }}">
+                Ver detalles
+            </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+</div>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center pagination-pokedex">
+        {% if pokemon_list.previous is not none %}
+            <li class="page-item">
+                <a class="page-link" href="?offset={{ pokemon_list.pagination.previous_offset }}&page_number={{ pokemon_list.pagination.previous_page }}">Anterior</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?offset=0&page_number=0">Primera página</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" href="#">Anterior</a>
+            </li>
+        {% endif %}
+        <!--pagination per 10 pages-->
+        {% for page in pokemon_list.pagination.next_pages %}
+            {% if page.page_number == pokemon_list.pagination.current_page %}
+                <li class="page-item active">
+                    <a class="page-link" href="?offset={{ page.offset }}&page_number={{ page.page_number }}">{{ page.page_number }}</a>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?offset={{ page.offset }}&page_number={{ page.page_number }}">{{ page.page_number }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+        {% if pokemon_list.next is not none %}
+            <li class="page-item">
+                <a class="page-link" href="?offset={{ pokemon_list.pagination.final_offset }}&page_number={{ pokemon_list.pagination.final_page }}">Última página</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?offset={{ pokemon_list.pagination.next_offset }}&page_number={{ pokemon_list.pagination.next_page }}">Siguiente</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" href="#">Siguiente</a>
+            </li>
+        {% endif %}
+    </ul>
+  </nav>
+
+{% for pokemon in pokemon_list.results %}
+<!-- Modal -->
+<div class="modal fade" id="pokemonModal{{ pokemon.name }}" tabindex="-1" aria-labelledby="pokemonModal{{ pokemon.name }}label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content-pokedex">
+            <div class="modal-header">
+                <h5 class="modal-title-pokedex" id="pokemonModal{{ pokemon.name }}label">#{{pokemon.id}} {{ pokemon.name }}</h5>
+            </div>
+            <div class="modal-body modal-body-pokedex">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <img src="{{ pokemon.image }}" alt="{{ pokemon.name }}">
+                    </div>
+                    <div class="col-sm-10">
+                        <p class="text-capitalize"><strong>Tipos:</strong> {{ pokemon.types.0.type.name }}</p>
+                        <p><strong>Altura:</strong> {{ pokemon.height }}'</p>
+                        <p><strong>Peso:</strong> {{ pokemon.weight }} kg</p>
+                        <p><strong>Habilidades:</strong></p>
+                        <ul>
+                            {% for ability in pokemon.abilities %}
+                                <li class="text-capitalize">{{ ability.ability.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}
