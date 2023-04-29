@@ -93,6 +93,17 @@ def magic(request):
 
 def pokemon(request):
     return render(request, 'core/pokemon.html')
+    #get products from API
+    api_response = requests.get('https://duocucpgy3221api-production.up.railway.app/api/products/')
+    #check if the response is ok    
+    if api_response.status_code not in [200, 201]:
+        return redirect('home')
+    
+    #filter products by type=0 and catergory=2
+    products = [product for product in api_response.json() if product['type'] == 2 and product['category'] == 0] 
+
+    #render the template with the products
+    return render(request, 'core/pokemon.html', {'products': products})
 
 def registro(request):
     return render(request, 'core/registro.html')
