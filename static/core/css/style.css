@@ -7,11 +7,11 @@ body {
 .img-footer-container {
     position: relative;
 }
-  
-.img-footer {
+
+.align-right {
     position: absolute;
     bottom: 0;
-    left: 0;
+    right: 0;
 }
 
 .navbar {

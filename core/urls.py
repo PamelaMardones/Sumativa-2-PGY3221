@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import add_to_cart, cart, checkout, home, actualizar,juegos_mesa, login_view,magic,pokemon,register, remove_from_cart,yugioh, logout_view, update
+from .views import add_to_cart, cart, checkout, home, actualizar,juegos_mesa, login_view,magic,pokemon,register, remove_from_cart,yugioh, logout_view, update, search
 
 
 urlpatterns = [
@@ -13,6 +13,7 @@ urlpatterns = [
     path('pokemon/', pokemon, name = "pokemon"),
     path('registro/', register, name = "registro"),
     path('yugioh/', yugioh, name = "yugioh"),
+    path('search/', search, name = "search"),
     path('cart/<int:cart_id>/', cart, name = "cart"),
     path('add-to-cart/<int:cart_id>/<int:product_id>/', add_to_cart, name = "add_to_cart"),
     path('remove-from-cart/<int:cart_id>/<int:product_id>/', remove_from_cart, name = "remove_from_cart"),

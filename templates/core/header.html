@@ -9,8 +9,9 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <form class="d-flex mx-auto">
-            <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
+            <form class="d-flex mx-auto" action="{% url 'search'%}" method="POST">
+            {% csrf_token %}
+            <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search" name="search_term" id="search_term">
             <button class="btn btn-outline-success" type="submit">Buscar</button>
             </form>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">

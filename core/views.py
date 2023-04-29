@@ -99,10 +99,10 @@ def pokemon(request):
         return redirect('home')
     
     #filter products by type=0 and catergory=2
-    products = [product for product in api_response.json() if product['type'] == 2 and product['category'] == 0] 
+    products = [product for product in api_response.json() if product['type'] == 0 and product['category'] == 0] 
 
     if not request.user.is_authenticated:
-        return render(request, 'core/magic.html', {'products': products})
+        return render(request, 'core/pokemon.html', {'products': products})
     
     cart = get_cart(request)
 
@@ -357,3 +357,25 @@ def checkout(request, cart_id):
     
     messages.add_message(request, messages.SUCCESS, 'Compra realizada con éxito.')
     return redirect('home')
+
+def search(request):
+    #get search term from form
+    search_term = request.POST.get('search_term', '')
+
+    #get products with search term like %% from API
+    api_response = requests.get(f'https://duocucpgy3221api-production.up.railway.app/api/products/search/?name={search_term}')
+
+    #check if the response is ok
+    if api_response.status_code not in [200, 201]:
+        messages.add_message(request, messages.ERROR, 'No se encontraron productos.')
+        #redirect to home and send alert
+        return redirect('home')
+    
+    products = api_response.json()
+
+    if not request.user.is_authenticated:
+        return render(request, 'core/search.html', {'products': products, 'search_term': search_term})
+    
+    cart = get_cart(request)
+
+    return render(request, 'core/search.html', {'products': products, 'search_term': search_term, 'cart': cart})
