@@ -382,13 +382,36 @@ def search(request):
     return render(request, 'core/search.html', {'products': products, 'search_term': search_term, 'cart': cart})
 
 def pokedex(request):
-    page_number = request.GET.get('page_number', 0)
-    limit = request.GET.get('limit', 12)
-    offset = request.GET.get('offset', 0)
+    page_number = request.GET.get('page_number', '0')
+    limit = request.GET.get('limit', '12')
+    offset = request.GET.get('offset', '0')
+    search_term = request.GET.get('search_term', None)
 
     page_number = int(page_number)
     limit = int(limit)
     offset = int(offset.replace(',', ''))
+
+    if search_term is not None and search_term != '':
+        #get pokemons from API
+        search_term = search_term.lower()
+        api_response = requests.get(f'https://pokeapi.co/api/v2/pokemon/{search_term}/')
+
+        #check if the response is ok
+        if api_response.status_code not in [200, 201]:
+            messages.add_message(request, messages.INFO, 'No se encontraron pokemones.')
+            #redirect to home and send alert
+            return redirect('pokedex')
+        
+        pokemon = api_response.json()
+
+        pokemon_list = {}
+        pokemon_list['count'] = 1
+        pokemon_list['next'] = None
+        pokemon_list['previous'] = None
+        pokemon_list['results'] = [pokemon]
+        pokemon_list['results'][0]['image'] = pokemon['sprites']['front_default']
+
+        return render(request, 'core/pokedex.html', {'pokemon_list': pokemon_list, 'search_term': search_term})
 
     current_page = f'https://pokeapi.co/api/v2/pokemon/?limit={limit}&offset={offset}'
 
